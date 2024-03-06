@@ -11,6 +11,9 @@ screen.bgcolor("black")
 screen.title("My Snake Game")
 screen.tracer(0)
 
+# difficulty adjusts time till screen refreshes smaller numbers make the snake move faster
+difficulty = .05
+
 # create snake
 snake = Snake()
 food = Food()
@@ -19,8 +22,10 @@ scoreboard = Scoreboard()
 game_is_on = True
 while game_is_on:
     screen.update()
-    time.sleep(.1)
+    time.sleep(difficulty)
     snake.move()
+
+
 
     # detect collision with food
     if snake.head.distance(food) < 15:
@@ -29,15 +34,15 @@ while game_is_on:
         scoreboard.increase_score()
 
     # detect collision with wall
-    if snake.head.xcor() > 280 or snake.head.xcor() < -280 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
-        game_is_on = False
-        scoreboard.game_over()
+    if snake.head.xcor() > 290 or snake.head.xcor() < -290 or snake.head.ycor() > 290 or snake.head.ycor() < -290:
+        scoreboard.reset()
+        snake.reset()
 
     # detect collision with tail
     for segment in snake.segments[1:]:
         if snake.head.distance(segment) < 10:
-            game_is_on = False
-            scoreboard.game_over()
+            scoreboard.reset()
+            snake.reset()
 
     screen.listen()
     screen.onkey(snake.up, "Up")
